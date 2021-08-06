@@ -912,47 +912,49 @@ class BezierChartState extends State<BezierChart>
               if (widget.config!.displayYAxis) {
                 if (_yValues != null && _yValues!.isNotEmpty) {
                   //add a background container for the Y Axis
-                  items.add(Positioned(
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: Container(
-                      width: _yAxisWidth! + 10,
-                      decoration: widget.config!.backgroundGradient != null
-                          ? BoxDecoration(
-                              gradient: widget.config!.backgroundGradient)
-                          : null,
-                      color: widget.config!.backgroundGradient != null
-                          ? null
-                          : widget.config!.backgroundColor,
+                  items.add(
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      bottom: 0,
+                      child: Container(
+                        width: (_yAxisWidth ?? 0) + 10,
+                        decoration: widget.config!.backgroundGradient != null
+                            ? BoxDecoration(
+                                gradient: widget.config!.backgroundGradient)
+                            : null,
+                        color: widget.config!.backgroundGradient != null
+                            ? null
+                            : widget.config!.backgroundColor,
+                      ),
                     ),
-                  ));
+                  );
                 }
 
                 final fontSize = widget.config!.yAxisTextStyle?.fontSize ?? 8.0;
-                final maxValue = _yValues!.last! -
-                    (widget.config!.startYAxisFromNonZeroValue
-                        ? _yValues!.first!
-                        : 0.0);
-                final steps = widget.config!.stepsYAxis != null &&
-                        widget.config!.stepsYAxis! > 0
-                    ? widget.config!.stepsYAxis
-                    : null;
-                _addYItem(double value, {Key? key}) {
+
+                if (widget.config!.yAxisLabel != '') {
                   items.add(
                     Positioned(
-                      bottom: _getRealValue(
-                              value -
-                                  (widget.config!.startYAxisFromNonZeroValue
-                                      ? _yValues!.first!
-                                      : 0.0),
-                              maxHeight - widget.config!.footerHeight,
-                              maxValue) +
-                          widget.config!.footerHeight +
-                          fontSize / 2,
+                      bottom: 26 * 11 + widget.config!.footerHeight + fontSize,
                       left: 10.0,
                       child: Text(
-                        formatAsIntOrDouble(value),
+                        widget.config!.yAxisLabel,
+                        style: widget.config!.yAxisTextStyle ??
+                            TextStyle(color: Colors.white, fontSize: fontSize),
+                      ),
+                    ),
+                  );
+                }
+
+                _addYItem(int index, double label, {Key? key}) {
+                  items.add(
+                    Positioned(
+                      bottom:
+                          26 * index + widget.config!.footerHeight + fontSize,
+                      left: 10.0,
+                      child: Text(
+                        formatAsIntOrDouble(label),
                         key: key,
                         style: widget.config!.yAxisTextStyle ??
                             TextStyle(color: Colors.white, fontSize: fontSize),
@@ -961,24 +963,45 @@ class BezierChartState extends State<BezierChart>
                   );
                 }
 
-                if (steps != null) {
-                  final max = _yValues!.last!;
-                  final min = widget.config!.startYAxisFromNonZeroValue
-                      ? _yValues!.first!.ceil()
-                      : 0;
-                  for (int i = min; i < max + steps; i++) {
-                    if (i % steps == 0) {
-                      bool isLast =
-                          (i + steps) > max && (i + steps) >= (max + steps);
-                      _addYItem(i.toDouble(),
-                          key: isLast ? _keyLastYAxisItem : null);
-                    }
-                  }
-                } else {
-                  for (double? val in _yValues!) {
-                    _addYItem(val!,
-                        key: val == _yValues!.last ? _keyLastYAxisItem : null);
-                  }
+                for (int i = 0; i <= 10; i++) {
+                  num value = (widget.config!.stepsYAxis! / 10 * i).round();
+                  _addYItem(i, value.toDouble(), key: UniqueKey());
+                }
+
+                // yAxis2
+                if (widget.config!.y2AxisLabel != '') {
+                  items.add(
+                    Positioned(
+                      bottom: 26 * 11 + widget.config!.footerHeight + fontSize,
+                      right: 10.0,
+                      child: Text(
+                        widget.config!.y2AxisLabel,
+                        style: widget.config!.yAxisTextStyle ??
+                            TextStyle(color: Colors.white, fontSize: fontSize),
+                      ),
+                    ),
+                  );
+                }
+
+                _addY2Item(int index, double displayValue, {Key? key}) {
+                  items.add(
+                    Positioned(
+                      bottom:
+                          26 * index + widget.config!.footerHeight + fontSize,
+                      right: 10.0,
+                      child: Text(
+                        formatAsIntOrDouble(displayValue),
+                        key: key,
+                        style: widget.config!.yAxisTextStyle ??
+                            TextStyle(color: Colors.white, fontSize: fontSize),
+                      ),
+                    ),
+                  );
+                }
+
+                for (int i = 0; i <= 10; i++) {
+                  num value = (widget.config!.stepsY2Axis! / 10 * i).round();
+                  _addY2Item(i, value.toDouble(), key: UniqueKey());
                 }
               }
               return Stack(

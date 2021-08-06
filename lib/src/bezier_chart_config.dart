@@ -64,9 +64,13 @@ class BezierChartConfig {
   ///e.g 1: stepsYAxis : 5 ,  if your maxValue is 100, then the Y values should be: [0,5,10,15 .... 100]
   ///e.g 2: stepsYAxis : 10 , if your maxValue is 100, then the Y values should be: [10,20,30,40 .... 100]
   final int? stepsYAxis;
+  final int? stepsY2Axis;
 
   ///`true` if you want to start the values of Y axis from the minimum value of your Y values.
   final bool startYAxisFromNonZeroValue;
+
+  final String yAxisLabel;
+  final String y2AxisLabel;
 
   ///TextStyle of the text of the Y Axis values
   final TextStyle? yAxisTextStyle;
@@ -125,8 +129,11 @@ class BezierChartConfig {
     this.backgroundGradient,
     this.verticalIndicatorFixedPosition = false,
     this.startYAxisFromNonZeroValue = true,
+    this.yAxisLabel = '',
+    this.y2AxisLabel = '',
     this.displayLinesXAxis = false,
     this.stepsYAxis,
+    this.stepsY2Axis,
     this.xLinesColor = Colors.grey,
     this.displayDataPointWhenNoValue = true,
     this.displayPreviousDataPointWhenNoValue = false,
