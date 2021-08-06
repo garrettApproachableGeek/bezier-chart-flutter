@@ -26,6 +26,8 @@ class BezierLine {
   ///Label used in the bubble info indicator
   final String label;
 
+  final double maxValue;
+
   const BezierLine({
     this.lineColor = Colors.white,
     this.lineStrokeWidth = 3.0,
@@ -34,6 +36,7 @@ class BezierLine {
     Color? dataPointFillColor,
     Color? dataPointStrokeColor,
     this.data,
+    required this.maxValue,
   })  : this.dataPointFillColor = dataPointFillColor ?? lineColor,
         this.dataPointStrokeColor = dataPointStrokeColor ?? lineColor;
 
@@ -46,6 +49,7 @@ class BezierLine {
       dataPointStrokeColor: bezierLine.dataPointStrokeColor,
       onMissingValue: bezierLine.onMissingValue,
       data: bezierLine.data,
+      maxValue: bezierLine.maxValue,
     );
   }
 
@@ -59,7 +63,8 @@ class BezierLine {
           lineStrokeWidth == other.lineStrokeWidth &&
           dataPointFillColor == other.dataPointFillColor &&
           dataPointStrokeColor == other.dataPointStrokeColor &&
-          hashCode == other.hashCode;
+          hashCode == other.hashCode &&
+          maxValue == other.maxValue;
 
   @override
   int get hashCode => data!

@@ -615,6 +615,7 @@ class BezierChartState extends State<BezierChart>
             dataPointFillColor: line.dataPointFillColor,
             dataPointStrokeColor: line.dataPointStrokeColor,
             data: newDataPoints,
+            maxValue: line.maxValue,
           ),
         );
         computedSeries.add(newBezierLine);
@@ -854,7 +855,7 @@ class BezierChartState extends State<BezierChart>
                         shouldRepaintChart: areSeriesDifferent,
                         config: widget.config,
                         maxYValue: _yValues!.last,
-                        minYValue: _yValues!.first,
+                        minYValue: 0,
                         bezierChartScale: _currentBezierChartScale,
                         verticalIndicatorPosition: _verticalIndicatorPosition,
                         series: computedSeries,
@@ -1215,7 +1216,7 @@ class _BezierChartPainter extends CustomPainter {
             _getRealValue(
               axisY - (config!.startYAxisFromNonZeroValue ? minYValue! : 0.0),
               height,
-              _maxValueY,
+              line.maxValue,
             );
 
         if (config!.displayLinesXAxis && series!.length == 1) {
